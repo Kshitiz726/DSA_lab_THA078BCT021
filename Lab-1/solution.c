@@ -1,69 +1,85 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
+//define maximum size of stack
+#define MAX_SIZE 10
 
-#define MAX_SIZE 100
-struct Stack{
-    int top;
+//build stack
+struct  Stack{
     int items[MAX_SIZE];
+    int top;
 };
+
+
+//initialize the stack
 
 void initializeStack(struct Stack *stack)
 {
-    stack->top = -1;
+    stack -> top = -1;
+}
+//check if stack is full
+int isFull(struct Stack *stack)
+{
+    return stack->top == MAX_SIZE - 1; //compares and returns 0 or 1
 }
 
-bool isEmpty(struct Stack *stack) {
-    return (stack->top == -1);
-}
 
-bool isFull(struct Stack *stack) {
-    return (stack->top == MAX_SIZE - 1);
+//check if stack is empty
+int isEmpty(struct Stack *stack){
+    return stack -> top == -1;
 }
-
-void push(struct Stack *stack, int value) {
-    if (isFull(stack)) {
-        printf("Stack Overflow! Cannot push more elements.\n");
-        return;
+//push the element into the stack
+int push(struct Stack *stack , int element)
+{
+    if(isFull(stack))
+    {
+        printf("Stack is Full");
+        return -1;
     }
-    stack->items[++(stack->top)] = value;
-    printf("%d pushed into the stack.\n", value);
-}
-
-int pop(struct Stack *stack) {
-    if (isEmpty(stack)) {
-        printf("Stack Underflow! Cannot pop from an empty stack.\n");
-        return -1; // Or any other value indicating underflow
+    else{
+        stack -> top++;
+        stack -> items [stack-> top] = element;
+        printf("%d is pushed into the stack\n", element);
+        return 1;
     }
-    int popped = stack->items[(stack->top)--];
-    printf("%d popped from the stack.\n", popped);
-    return popped;
 }
 
 
-int peek(struct Stack *stack) {
-    if (isEmpty(stack)) {
-        printf("Stack is empty.\n");
-        return -1; // Or any other value indicating empty stack
+//pop the element from the stack
+int pop(struct Stack *stack)
+{
+    if(isEmpty(stack))
+    {
+        printf("Stack is Empty");
+        return -1;
     }
-    return stack->items[stack->top];
+    else{
+        int popped = stack->items[stack->top];
+        stack->top --;
+        return popped;
+    }
 }
 
-
+//peek
+int peek(struct Stack *stack)
+{
+    if(isEmpty(stack))
+    {
+        printf("Stack is empty");
+        return -1;
+    }
+    else{
+        return stack->items[stack -> top];
+    }
+}
 int main()
 {
-    struct Stack myStack;
-    initializeStack(&myStack);
+    struct Stack stack;
+    initializeStack(&stack);
 
-    push(&myStack, 5);
-    push(&myStack, 10);
-    push(&myStack, 15);
-
-    printf("Top element: %d\n", peek(&myStack));
-
-    pop(&myStack);
-    pop(&myStack);
-    pop(&myStack);
-    pop(&myStack); // Trying to pop from an empty stack
-
-    return 0;
+    push (&stack, 1);
+    push (&stack , 2);
+     push (&stack , 3);
+    printf("Top element: %d\n", peek(&stack));
+    printf("Popped element:%d\n", pop(&stack));
+    printf("Element at top after pop:%d\n" , peek(&stack));
 }
